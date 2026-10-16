@@ -52,34 +52,26 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 <script type="module">
 import * as THREE from 'three';
 import {STLLoader} from 'three/addons/loaders/STLLoader.js';
-import {ThreeMFLoader} from 'three/addons/loaders/3MFLoader.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
 // To add a model: put the file in /models and add a line here.
+// 'preview' (optional) = lighter STL used only for the 3D view.
 const MODELS = [
   {file:'lamp_cover_D78.stl', name:'Lamp cover Ø78'},
   {file:'lamp_cover_D69.stl', name:'Lamp cover Ø69'},
   {file:'irrigator_holder_v2.stl', name:'Irrigator holder v2'},
   {file:'board_clip_radiator_v3.stl', name:'Board clip for radiator v3'},
-  {file:'cap_P2.00_v4_grip.3mf', name:'Cap P2.00 with grip v4'},
+  {file:'cap_P2.00_v4_grip.3mf', preview:'cap_P2.00_v4_grip_preview.stl', name:'Cap P2.00 with grip v4'},
   {file:'fishing_tripod_rocks_v2_100mm.stl', name:'Fishing rod tripod for rocks v2'},
 ];
 
 const color = 0x2b9aab;
 function loadModel(file){
-  const url = 'models/' + file;
   return new Promise((res, rej) => {
-    if (file.toLowerCase().endsWith('.3mf')) {
-      new ThreeMFLoader().load(url, group => {
-        group.traverse(o => { if (o.isMesh) { o.material = new THREE.MeshStandardMaterial({color, roughness:.55, metalness:.05}); } });
-        res(group);
-      }, undefined, rej);
-    } else {
-      new STLLoader().load(url, geo => {
-        geo.computeVertexNormals();
-        res(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color, roughness:.55, metalness:.05})));
-      }, undefined, rej);
-    }
+    new STLLoader().load('models/' + file, geo => {
+      geo.computeVertexNormals();
+      res(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color, roughness:.55, metalness:.05})));
+    }, undefined, rej);
   });
 }
 
@@ -105,8 +97,10 @@ function makeScene(){
   return scene;
 }
 function frame(camera, size){
-  const r = Math.max(size.x, size.y, size.z);
-  camera.position.set(r*1.1, r*0.95, r*1.35);
+  const r = size.length()/2;
+  const dist = r / Math.sin(THREE.MathUtils.degToRad(camera.fov/2)) * 1.08;
+  const dir = new THREE.Vector3(0.62, 0.5, 0.6).normalize();
+  camera.position.copy(dir.multiplyScalar(dist)).add(new THREE.Vector3(0, size.y/2, 0));
   camera.near = r/100; camera.far = r*50; camera.updateProjectionMatrix();
   return new THREE.Vector3(0, size.y/2, 0);
 }
@@ -131,7 +125,7 @@ for (const m of MODELS) {
 
 for (const m of MODELS) {
   try {
-    const obj = await loadModel(m.file);
+    const obj = await loadModel(m.preview || m.file);
     cache[m.file] = obj;
     const {wrap, size} = prepare(obj.clone());
     const scene = makeScene(); scene.add(wrap);
@@ -162,7 +156,7 @@ async function openViewer(m){
   document.getElementById('vdl').href = 'models/' + m.file;
   document.getElementById('vdl').setAttribute('download', '');
   modal.classList.add('open');
-  const obj = cache[m.file] || (cache[m.file] = await loadModel(m.file));
+  const obj = cache[m.file] || (cache[m.file] = await loadModel(m.preview || m.file));
   const {wrap, size} = prepare(obj.clone());
   vscene = makeScene(); vscene.add(wrap);
   const g = new THREE.GridHelper(Math.max(size.x, size.z)*2, 20, 0x999999, 0xcccccc);
