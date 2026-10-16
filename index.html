@@ -4,20 +4,186 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Hello</title>
+<title>3D Model Gallery</title>
 <style>
-body{margin:0;font-family:system-ui,sans-serif;background:#f5f5f2;color:#222;display:flex;min-height:100vh;align-items:center;justify-content:center}
-main{max-width:560px;padding:32px 16px;text-align:center}
-h1{font-size:2.2rem;margin:0 0 12px}
-p{line-height:1.5;color:#555}
-footer{margin-top:32px;font-size:.85rem;color:#999}
+:root{--bg:#f4f3ef;--card:#fff;--ink:#1d1d1b;--muted:#77756f;--line:#e3e1da;--accent:#2b7a87}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--ink:#eee;--muted:#9a9a96;--line:#2c2c2c;--accent:#5bb5c2}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+header{max-width:1100px;margin:0 auto;padding:40px 16px 8px}
+h1{margin:0;font-size:1.9rem;letter-spacing:-.02em}
+header p{margin:6px 0 0;color:var(--muted)}
+.grid{max-width:1100px;margin:0 auto;padding:24px 16px 48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:1;background:linear-gradient(180deg,#eef3f4,#dde6e8);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem}
+@media (prefers-color-scheme:dark){.thumb{background:linear-gradient(180deg,#26302f,#1b2222)}}
+.thumb img{width:100%;height:100%;object-fit:contain}
+.info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.name{font-weight:600}
+.meta{font-size:.82rem;color:var(--muted)}
+.actions{display:flex;gap:8px;margin-top:auto;padding-top:10px}
+.btn{flex:1;text-align:center;padding:8px 10px;border-radius:9px;font-size:.88rem;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:transparent;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal.open{display:flex}
+.viewer{background:var(--card);border-radius:14px;width:min(900px,100%);height:min(680px,90vh);display:flex;flex-direction:column;overflow:hidden}
+.vbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.vbar .name{flex:1}
+#stage{flex:1;position:relative}
+#stage canvas{display:block;width:100%;height:100%}
+.hint{position:absolute;left:12px;bottom:10px;font-size:.78rem;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
-<main>
-<h1>Hello! 👋</h1>
-<p>This is my first simple website, published with GitHub Pages.</p>
-<footer>Vilnius, 2026</footer>
-</main>
+<header>
+<h1>3D Model Gallery</h1>
+<p>My 3D-printable models. Click a model to rotate it, or download the file.</p>
+</header>
+<main class="grid" id="grid"></main>
+<div class="modal" id="modal">
+<div class="viewer">
+<div class="vbar"><span class="name" id="vname"></span><a class="btn primary" id="vdl" style="flex:0 0 auto">Download</a><button class="btn" id="vclose" style="flex:0 0 auto">Close</button></div>
+<div id="stage"><span class="hint">Drag to rotate · scroll to zoom</span></div>
+</div>
+</div>
+<footer>Personal gallery · files for personal use</footer>
+<script type="module">
+import * as THREE from 'three';
+import {STLLoader} from 'three/addons/loaders/STLLoader.js';
+import {ThreeMFLoader} from 'three/addons/loaders/3MFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+// To add a model: put the file in /models and add a line here.
+const MODELS = [
+  {file:'lamp_cover_D78.stl', name:'Lamp cover Ø78'},
+  {file:'lamp_cover_D69.stl', name:'Lamp cover Ø69'},
+  {file:'irrigator_holder_v2.stl', name:'Irrigator holder v2'},
+  {file:'board_clip_radiator_v3.stl', name:'Board clip for radiator v3'},
+  {file:'cap_P2.00_v4_grip.3mf', name:'Cap P2.00 with grip v4'},
+  {file:'fishing_tripod_rocks_v2_100mm.stl', name:'Fishing rod tripod for rocks v2'},
+];
+
+const color = 0x2b9aab;
+function loadModel(file){
+  const url = 'models/' + file;
+  return new Promise((res, rej) => {
+    if (file.toLowerCase().endsWith('.3mf')) {
+      new ThreeMFLoader().load(url, group => {
+        group.traverse(o => { if (o.isMesh) { o.material = new THREE.MeshStandardMaterial({color, roughness:.55, metalness:.05}); } });
+        res(group);
+      }, undefined, rej);
+    } else {
+      new STLLoader().load(url, geo => {
+        geo.computeVertexNormals();
+        res(new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color, roughness:.55, metalness:.05})));
+      }, undefined, rej);
+    }
+  });
+}
+
+// Z-up (3D printing) to Y-up (three.js), centered on the floor
+function prepare(obj){
+  const wrap = new THREE.Group();
+  obj.rotation.x = -Math.PI/2;
+  wrap.add(obj);
+  const box = new THREE.Box3().setFromObject(wrap);
+  const c = box.getCenter(new THREE.Vector3());
+  obj.position.set(-c.x, -box.min.y, -c.z);
+  wrap.updateMatrixWorld(true);
+  const b2 = new THREE.Box3().setFromObject(wrap);
+  const size = b2.getSize(new THREE.Vector3());
+  return {wrap, size};
+}
+
+function makeScene(){
+  const scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.1));
+  const d1 = new THREE.DirectionalLight(0xffffff, 1.6); d1.position.set(3,5,4); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, .5); d2.position.set(-4,2,-3); scene.add(d2);
+  return scene;
+}
+function frame(camera, size){
+  const r = Math.max(size.x, size.y, size.z);
+  camera.position.set(r*1.1, r*0.95, r*1.35);
+  camera.near = r/100; camera.far = r*50; camera.updateProjectionMatrix();
+  return new THREE.Vector3(0, size.y/2, 0);
+}
+
+// Thumbnails: one shared renderer, rendered to images
+const tr = new THREE.WebGLRenderer({antialias:true, alpha:true, preserveDrawingBuffer:true});
+tr.setSize(480, 480);
+const grid = document.getElementById('grid');
+const cache = {};
+
+for (const m of MODELS) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<div class="thumb">Loading…</div><div class="info"><div class="name"></div><div class="meta"></div>
+    <div class="actions"><button class="btn view">View 3D</button><a class="btn primary" download>Download</a></div></div>`;
+  card.querySelector('.name').textContent = m.name;
+  card.querySelector('a').href = 'models/' + m.file;
+  card.querySelector('.thumb').onclick = card.querySelector('.view').onclick = () => openViewer(m);
+  grid.appendChild(card);
+  m.card = card;
+}
+
+for (const m of MODELS) {
+  try {
+    const obj = await loadModel(m.file);
+    cache[m.file] = obj;
+    const {wrap, size} = prepare(obj.clone());
+    const scene = makeScene(); scene.add(wrap);
+    const cam = new THREE.PerspectiveCamera(35, 1, .1, 1000);
+    cam.lookAt(frame(cam, size));
+    tr.render(scene, cam);
+    const img = new Image(); img.src = tr.domElement.toDataURL('image/png'); img.alt = m.name;
+    const t = m.card.querySelector('.thumb'); t.textContent = ''; t.appendChild(img);
+    const ext = m.file.split('.').pop().toUpperCase();
+    m.card.querySelector('.meta').textContent = `${size.x.toFixed(0)} × ${size.z.toFixed(0)} × ${size.y.toFixed(0)} mm · ${ext}`;
+  } catch (e) {
+    m.card.querySelector('.thumb').textContent = 'Preview unavailable';
+  }
+}
+
+// Interactive viewer
+const modal = document.getElementById('modal'), stage = document.getElementById('stage');
+const vr = new THREE.WebGLRenderer({antialias:true, alpha:true});
+vr.setPixelRatio(Math.min(devicePixelRatio, 2));
+stage.prepend(vr.domElement);
+const vcam = new THREE.PerspectiveCamera(35, 1, .1, 1000);
+const controls = new OrbitControls(vcam, vr.domElement);
+controls.enableDamping = true;
+let vscene = null, running = false;
+
+async function openViewer(m){
+  document.getElementById('vname').textContent = m.name;
+  document.getElementById('vdl').href = 'models/' + m.file;
+  document.getElementById('vdl').setAttribute('download', '');
+  modal.classList.add('open');
+  const obj = cache[m.file] || (cache[m.file] = await loadModel(m.file));
+  const {wrap, size} = prepare(obj.clone());
+  vscene = makeScene(); vscene.add(wrap);
+  const g = new THREE.GridHelper(Math.max(size.x, size.z)*2, 20, 0x999999, 0xcccccc);
+  g.material.opacity = .35; g.material.transparent = true; vscene.add(g);
+  controls.target.copy(frame(vcam, size)); controls.update();
+  resize();
+  if (!running) { running = true; loop(); }
+}
+function resize(){
+  const w = stage.clientWidth, h = stage.clientHeight;
+  vr.setSize(w, h, false); vcam.aspect = w/h; vcam.updateProjectionMatrix();
+}
+function loop(){
+  if (!modal.classList.contains('open')) { running = false; return; }
+  controls.update(); vr.render(vscene, vcam); requestAnimationFrame(loop);
+}
+function closeViewer(){ modal.classList.remove('open'); }
+document.getElementById('vclose').onclick = closeViewer;
+modal.onclick = e => { if (e.target === modal) closeViewer(); };
+addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
+addEventListener('resize', () => { if (modal.classList.contains('open')) resize(); });
+</script>
 </body>
 </html>
