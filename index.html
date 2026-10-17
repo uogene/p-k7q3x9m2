@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +62,8 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap}
 .pagefoot a:hover{border-color:var(--accent)}
 .sechead{max-width:1100px;margin:0 auto;padding:28px 16px 0}
 .sechead p{margin:6px 0 0;color:var(--muted)}
-@media (max-width:520px){.lg{display:none}nav.tabs{flex-wrap:nowrap;gap:4px}nav.tabs a{padding:6px 9px;font-size:.8rem;white-space:nowrap}.logo{font-size:.95rem;gap:5px}.topbar .in{gap:6px}.hero{padding-top:36px}.hero h1{font-size:2.1rem}}
+.sm{display:none}
+@media (max-width:520px){.lg{display:none}.sm{display:inline}.ttop{flex-wrap:wrap}.ttitle{white-space:normal;width:100%}nav.tabs{flex-wrap:nowrap;gap:4px}nav.tabs a{padding:6px 9px;font-size:.8rem;white-space:nowrap}.logo{font-size:.95rem;gap:5px}.topbar .in{gap:6px}.hero{padding-top:36px}.hero h1{font-size:2.1rem}}
 nav.tabs a{padding:7px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.9rem;border:1px solid var(--line);background:var(--card)}
 nav.tabs a.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 .page{display:none}.page.on{display:block}
@@ -84,35 +85,36 @@ nav.tabs a.on{background:var(--accent);border-color:var(--accent);color:var(--ac
 .empty{color:var(--muted);text-align:center;padding:40px}
 footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 </style>
+<script>function plural(n,a,b,c){const m=n%10,h=n%100;return n+" "+(m===1&&h!==11?a:(m>=2&&m<=4&&(h<12||h>14))?b:c);}</script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 </head>
 <body>
 <div class="topbar"><div class="in">
 <a class="logo" href="#home"><svg viewBox="0 0 24 24"><path d="M12 21c-5-3-7-7-6-10 1-2.5 3.5-3 6-3s5 .5 6 3c1 3-1 7-6 10z" fill="#e8a0a8" stroke="currentColor" stroke-width="1.2"/><path d="M8 8l2-2 2-2.5L14 6l2 2-4-.5z" fill="var(--accent)" stroke="currentColor" stroke-width="1"/><circle cx="10" cy="12" r=".7" fill="currentColor"/><circle cx="14" cy="12" r=".7" fill="currentColor"/><circle cx="12" cy="15" r=".7" fill="currentColor"/></svg>uogene</a>
-<nav class="tabs"><a href="#home" data-p="home">Home</a><a href="#models" data-p="models"><span class="lg">3D </span>Models</a><a href="#audio" data-p="audio">Audio<span class="lg"> Berry</span></a></nav>
+<nav class="tabs"><a href="#home" data-p="home">Главная</a><a href="#models" data-p="models"><span class="lg">3D-модели</span><span class="sm">Модели</span></a><a href="#audio" data-p="audio"><span class="lg">Аудио-ягодки</span><span class="sm">Аудио</span></a></nav>
 </div></div>
 
 <section class="page" id="p-home">
-<div class="hero"><h1>uogene</h1><p>My creative corner: things I design and print, and music I play.</p></div>
+<div class="hero"><h1>uogene</h1><p>Домашнее варенье из идей: что придумал, напечатал и сыграл. Угощайтесь!</p></div>
 <div class="sections">
-<a class="scard" href="#models"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h2>3D Models</h2><p>Printable models I designed: holders, covers, clips and more. Rotate in 3D and download.</p><div class="go"><span id="cnt-models">…</span><b>Open →</b></div></a>
-<a class="scard" href="#audio"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h2>Audio Berry</h2><p>My recordings and loop sessions. Newest first.</p><div class="go"><span id="cnt-audio">…</span><b>Open →</b></div></a>
+<a class="scard" href="#models"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h2>3D-модели</h2><p>Свежесваренные модели для 3D-печати: держатели, крышечки, клипсы и другие полезности. Покрутите в 3D и забирайте себе.</p><div class="go"><span id="cnt-models">…</span><b>Попробовать →</b></div></a>
+<a class="scard" href="#audio"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h2>Аудио-ягодки</h2><p>Мои записи и луп-сессии. Самые свежие ягодки — сверху.</p><div class="go"><span id="cnt-audio">…</span><b>Попробовать →</b></div></a>
 </div>
 </section>
 
-<div class="sechead" id="sechead"><div class="crumbs"><a href="#home">Home</a> › <span id="crumb"></span></div>
+<div class="sechead" id="sechead"><div class="crumbs"><a href="#home">Главная</a> › <span id="crumb"></span></div>
 <h1 id="ptitle"></h1><p id="psub"></p></div>
 <section class="page" id="p-models"><main class="grid" id="grid"></main>
-<div class="pagefoot"><a href="#home">← Home</a><a href="#audio">Audio Berry →</a></div></section>
+<div class="pagefoot"><a href="#home">← На главную</a><a href="#audio">Аудио-ягодки →</a></div></section>
 <section class="page" id="p-audio"><div class="tracks" id="tracks"></div>
-<div class="pagefoot"><a href="#home">← Home</a><a href="#models">3D Models →</a></div></section>
+<div class="pagefoot"><a href="#home">← На главную</a><a href="#models">3D-модели →</a></div></section>
 <div class="modal" id="modal">
 <div class="viewer">
-<div class="vbar"><span class="name" id="vname"></span><a class="btn primary" id="vdl" style="flex:0 0 auto">Download</a><button class="btn" id="vclose" style="flex:0 0 auto">Close</button></div>
-<div id="stage"><span class="hint">Drag to rotate · scroll to zoom</span></div>
+<div class="vbar"><span class="name" id="vname"></span><a class="btn primary" id="vdl" style="flex:0 0 auto">Скачать</a><button class="btn" id="vclose" style="flex:0 0 auto">Закрыть</button></div>
+<div id="stage"><span class="hint">Тяните, чтобы покрутить · колёсико — приблизить</span></div>
 </div>
 </div>
-<footer>uogene · personal creative corner</footer>
+<footer>uogene · варим идеи с любовью 🍓</footer>
 <script type="module">
 import * as THREE from 'three';
 import {STLLoader} from 'three/addons/loaders/STLLoader.js';
@@ -121,18 +123,18 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 // To add a model: put the file in /models and add a line here.
 // 'preview' (optional) = lighter STL used only for the 3D view.
 const MODELS = [
-  {file:'lamp_cover_D78.stl', name:'Lamp cover Ø78'},
-  {file:'lamp_cover_D69.stl', name:'Lamp cover Ø69'},
-  {file:'irrigator_holder_v2.stl', name:'Irrigator holder v2'},
-  {file:'board_clip_radiator_v3.stl', name:'Board clip for radiator v3'},
-  {file:'cap_P2.00_v4_grip.3mf', preview:'cap_P2.00_v4_grip_preview.stl', name:'Cap P2.00 with grip v4'},
-  {file:'fishing_tripod_rocks_v2_100mm.stl', name:'Fishing rod tripod for rocks v2'},
-  {file:'toothbrush_holder_v11.stl', name:'Toothbrush & toothpaste holder v11'},
-  {file:'piggy_bank_v2.stl', name:'Piggy bank v2'},
+  {file:'lamp_cover_D78.stl', name:'Крышка для лампы Ø78'},
+  {file:'lamp_cover_D69.stl', name:'Крышка для лампы Ø69'},
+  {file:'irrigator_holder_v2.stl', name:'Держатель для ирригатора v2'},
+  {file:'board_clip_radiator_v3.stl', name:'Клипса для доски на радиатор v3'},
+  {file:'cap_P2.00_v4_grip.3mf', preview:'cap_P2.00_v4_grip_preview.stl', name:'Крышка P2.00 с рифлёным хватом v4'},
+  {file:'fishing_tripod_rocks_v2_100mm.stl', name:'Тренога для удочки на камнях v2'},
+  {file:'toothbrush_holder_v11.stl', name:'Подставка для щёток и пасты v11'},
+  {file:'piggy_bank_v2.stl', name:'Копилка v2'},
 ];
 
 const color = 0xf4f4f2;
-document.getElementById('cnt-models').textContent = MODELS.length + ' models';
+document.getElementById('cnt-models').textContent = plural(MODELS.length,'модель','модели','моделей');
 function loadModel(file){
   return new Promise((res, rej) => {
     new STLLoader().load('models/' + file, geo => {
@@ -181,8 +183,8 @@ const cache = {};
 for (const m of MODELS) {
   const card = document.createElement('div');
   card.className = 'card';
-  card.innerHTML = `<div class="thumb">Loading…</div><div class="info"><div class="name"></div><div class="meta"></div>
-    <div class="actions"><button class="btn view">View 3D</button><a class="btn primary" download>Download</a></div></div>`;
+  card.innerHTML = `<div class="thumb">Варится…</div><div class="info"><div class="name"></div><div class="meta"></div>
+    <div class="actions"><button class="btn view">Покрутить в 3D</button><a class="btn primary" download>Скачать</a></div></div>`;
   card.querySelector('.name').textContent = m.name;
   card.querySelector('a').href = 'models/' + m.file;
   card.querySelector('.thumb').onclick = card.querySelector('.view').onclick = () => openViewer(m);
@@ -202,9 +204,9 @@ for (const m of MODELS) {
     const img = new Image(); img.src = tr.domElement.toDataURL('image/png'); img.alt = m.name;
     const t = m.card.querySelector('.thumb'); t.textContent = ''; t.appendChild(img);
     const ext = m.file.split('.').pop().toUpperCase();
-    m.card.querySelector('.meta').textContent = `${size.x.toFixed(0)} × ${size.z.toFixed(0)} × ${size.y.toFixed(0)} mm · ${ext}`;
+    m.card.querySelector('.meta').textContent = `${size.x.toFixed(0)} × ${size.z.toFixed(0)} × ${size.y.toFixed(0)} мм · ${ext}`;
   } catch (e) {
-    m.card.querySelector('.thumb').textContent = 'Preview unavailable';
+    m.card.querySelector('.thumb').textContent = 'Превью не сварилось';
   }
 }
 
@@ -249,8 +251,8 @@ addEventListener('resize', () => { if (modal.classList.contains('open')) resize(
 
 <script>
 // ===== Pages =====
-const PAGES={home:['',''],models:['3D Models','My 3D-printable models. Click a model to rotate it, or download the file.'],
-             audio:['Audio Berry','My recordings. Newest first.']};
+const PAGES={home:['',''],models:['3D-модели','Каждая модель — как баночка варенья: покрутите, рассмотрите и заберите с собой.'],
+             audio:['Аудио-ягодки','Записи, сваренные на лупах и вдохновении. Самые свежие — сверху.']};
 function show(){const p=(location.hash.slice(1) in PAGES)?location.hash.slice(1):'home';
   document.getElementById('sechead').style.display=p==='home'?'none':'';
   document.getElementById('crumb').textContent=PAGES[p][0];
@@ -278,12 +280,12 @@ function css(v){return getComputedStyle(document.documentElement).getPropertyVal
 function initAudio(){
   if(audioInit)return;audioInit=true;
   const box=document.getElementById('tracks');
-  if(!TRACKS.length){box.innerHTML='<div class="empty">No tracks yet</div>';return;}
+  if(!TRACKS.length){box.innerHTML='<div class="empty">Пока пусто — ягодки ещё зреют</div>';return;}
   TRACKS.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-  const fdate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+  const fdate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'}):'';
   for(const t of TRACKS){
     if(t.youtube){const y=document.createElement('div');y.className='track yt';
-      y.innerHTML=`<div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime"></span><a class="tdl" target="_blank" rel="noopener">Open on YouTube ↗</a></span></div>
+      y.innerHTML=`<div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime"></span><a class="tdl" target="_blank" rel="noopener">Смотреть на YouTube ↗</a></span></div>
         <div class="ytwrap"><iframe loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>`;
       y.querySelector('.ttitle').textContent=t.title;
       y.querySelector('.ttime').textContent=fdate(t.date);
@@ -293,8 +295,8 @@ function initAudio(){
       y.querySelector('iframe').title=t.title;
       box.appendChild(y);continue;}
     const el=document.createElement('div');el.className='track';
-    el.innerHTML=`<button class="play" aria-label="Play">${ICON_PLAY}</button>
-      <div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime">0:00 / 0:00</span><a class="tdl" download>Download</a></span></div>
+    el.innerHTML=`<button class="play" aria-label="Играть">${ICON_PLAY}</button>
+      <div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime">0:00 / 0:00</span><a class="tdl" download>Скачать</a></span></div>
       <canvas class="wave"></canvas></div>`;
     el.querySelector('.ttitle').textContent=t.title;
     el.querySelector('.tdl').href='audio/'+t.file;
@@ -325,7 +327,7 @@ function initAudio(){
       if(a.paused){if(current&&current!==t)current.a.pause();current=t;a.play();}};
   }
 }
-document.getElementById('cnt-audio').textContent=TRACKS.length+(TRACKS.length===1?' recording':' recordings');
+document.getElementById('cnt-audio').textContent=plural(TRACKS.length,'запись','записи','записей');
 show();
 </script>
 </body>
