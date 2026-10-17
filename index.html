@@ -6,8 +6,8 @@
 <meta name="robots" content="noindex, nofollow">
 <title>3D Model Gallery</title>
 <style>
-:root{--bg:#f4f3ef;--card:#fff;--ink:#1d1d1b;--muted:#77756f;--line:#e3e1da;--accent:#2b7a87}
-@media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--ink:#eee;--muted:#9a9a96;--line:#2c2c2c;--accent:#5bb5c2}}
+:root{--bg:#f4f3ef;--card:#fff;--ink:#1d1d1b;--muted:#77756f;--line:#e3e1da;--accent:#7fd8b8;--accent-ink:#0d3b2c}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--ink:#eee;--muted:#9a9a96;--line:#2c2c2c;--accent:#7fd8b8;--accent-ink:#0d3b2c}}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
 header{max-width:1100px;margin:0 auto;padding:40px 16px 8px}
@@ -25,7 +25,8 @@ header p{margin:6px 0 0;color:var(--muted)}
 .meta{font-size:.82rem;color:var(--muted)}
 .actions{display:flex;gap:8px;margin-top:auto;padding-top:10px}
 .btn{flex:1;text-align:center;padding:8px 10px;border-radius:9px;font-size:.88rem;text-decoration:none;border:1px solid var(--line);color:var(--ink);background:transparent;cursor:pointer;font-family:inherit}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.primary:hover{filter:brightness(.95)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
 .modal.open{display:flex}
 .viewer{background:var(--card);border-radius:14px;width:min(900px,100%);height:min(680px,90vh);display:flex;flex-direction:column;overflow:hidden}
@@ -66,6 +67,7 @@ const MODELS = [
   {file:'cap_P2.00_v4_grip.3mf', preview:'cap_P2.00_v4_grip_preview.stl', name:'Cap P2.00 with grip v4'},
   {file:'fishing_tripod_rocks_v2_100mm.stl', name:'Fishing rod tripod for rocks v2'},
   {file:'toothbrush_holder_v11.stl', name:'Toothbrush & toothpaste holder v11'},
+  {file:'piggy_bank_v2.stl', name:'Piggy bank v2'},
 ];
 
 const color = 0xf4f4f2;
