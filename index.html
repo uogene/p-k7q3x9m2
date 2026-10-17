@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>3D Model Gallery</title>
+<title>uogene</title>
 <style>
 :root{--bg:#f4f3ef;--card:#fff;--ink:#1d1d1b;--muted:#77756f;--line:#e3e1da;--accent:#7fd8b8;--accent-ink:#0d3b2c}
 @media (prefers-color-scheme:dark){:root{--bg:#141414;--card:#1e1e1e;--ink:#eee;--muted:#9a9a96;--line:#2c2c2c;--accent:#7fd8b8;--accent-ink:#0d3b2c}}
@@ -38,6 +38,22 @@ header p{margin:6px 0 0;color:var(--muted)}
 #stage{flex:1;position:relative}
 #stage canvas{display:block;width:100%;height:100%}
 .hint{position:absolute;left:12px;bottom:10px;font-size:.78rem;color:var(--muted)}
+nav.tabs{display:flex;gap:6px;margin-top:16px}
+nav.tabs a{padding:7px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.9rem;border:1px solid var(--line);background:var(--card)}
+nav.tabs a.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.page{display:none}.page.on{display:block}
+.tracks{max-width:1100px;margin:0 auto;padding:24px 16px 48px;display:flex;flex-direction:column;gap:14px}
+.track{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;gap:16px;align-items:center;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.04)}
+.play{flex:0 0 56px;height:56px;border-radius:50%;border:none;background:var(--accent);color:var(--accent-ink);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.play svg{width:22px;height:22px}
+.tbody{flex:1;min-width:0}
+.ttop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+.ttitle{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttime{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.wave{width:100%;height:64px;display:block;cursor:pointer}
+.tdl{font-size:.8rem;color:var(--muted);text-decoration:none;margin-left:10px}
+.tdl:hover{color:var(--ink)}
+.empty{color:var(--muted);text-align:center;padding:40px}
 footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
@@ -45,17 +61,19 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 <body>
 <header>
 <div class="brand">uogene</div>
-<h1>3D Model Gallery</h1>
-<p>My 3D-printable models. Click a model to rotate it, or download the file.</p>
+<h1 id="ptitle">3D Model Gallery</h1>
+<p id="psub">My 3D-printable models. Click a model to rotate it, or download the file.</p>
+<nav class="tabs"><a href="#models" data-p="models">3D Models</a><a href="#audio" data-p="audio">Audio Berry</a></nav>
 </header>
-<main class="grid" id="grid"></main>
+<section class="page" id="p-models"><main class="grid" id="grid"></main></section>
+<section class="page" id="p-audio"><div class="tracks" id="tracks"></div></section>
 <div class="modal" id="modal">
 <div class="viewer">
 <div class="vbar"><span class="name" id="vname"></span><a class="btn primary" id="vdl" style="flex:0 0 auto">Download</a><button class="btn" id="vclose" style="flex:0 0 auto">Close</button></div>
 <div id="stage"><span class="hint">Drag to rotate · scroll to zoom</span></div>
 </div>
 </div>
-<footer>Personal gallery · files for personal use</footer>
+<footer>uogene · personal creative corner</footer>
 <script type="module">
 import * as THREE from 'three';
 import {STLLoader} from 'three/addons/loaders/STLLoader.js';
@@ -187,6 +205,68 @@ document.getElementById('vclose').onclick = closeViewer;
 modal.onclick = e => { if (e.target === modal) closeViewer(); };
 addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
 addEventListener('resize', () => { if (modal.classList.contains('open')) resize(); });
+</script>
+
+<script>
+// ===== Pages =====
+const PAGES={models:['3D Model Gallery','My 3D-printable models. Click a model to rotate it, or download the file.'],
+             audio:['Audio Berry','My recordings. Press play, click the waveform to jump.']};
+function show(){const p=(location.hash.slice(1) in PAGES)?location.hash.slice(1):'models';
+  document.querySelectorAll('.page').forEach(e=>e.classList.toggle('on',e.id==='p-'+p));
+  document.querySelectorAll('nav.tabs a').forEach(a=>a.classList.toggle('on',a.dataset.p===p));
+  document.getElementById('ptitle').textContent=PAGES[p][0];document.getElementById('psub').textContent=PAGES[p][1];
+  if(p==='audio')initAudio();}
+addEventListener('hashchange',show);
+
+// ===== Audio Berry =====
+// To add a track: put the mp3 in /audio and add a line here.
+const TRACKS=[
+  {file:'cozy_vibes.mp3', title:'Cozy Vibes'},
+];
+const ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+const ICON_PAUSE='<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>';
+const fmt=t=>isFinite(t)?Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,'0'):'0:00';
+let audioInit=false,current=null;
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+function initAudio(){
+  if(audioInit)return;audioInit=true;
+  const box=document.getElementById('tracks');
+  if(!TRACKS.length){box.innerHTML='<div class="empty">No tracks yet</div>';return;}
+  for(const t of TRACKS){
+    const el=document.createElement('div');el.className='track';
+    el.innerHTML=`<button class="play" aria-label="Play">${ICON_PLAY}</button>
+      <div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime">0:00 / 0:00</span><a class="tdl" download>Download</a></span></div>
+      <canvas class="wave"></canvas></div>`;
+    el.querySelector('.ttitle').textContent=t.title;
+    el.querySelector('.tdl').href='audio/'+t.file;
+    box.appendChild(el);
+    const a=new Audio('audio/'+t.file);a.preload='metadata';
+    const btn=el.querySelector('.play'),cv=el.querySelector('.wave'),tm=el.querySelector('.ttime');
+    t.a=a;t.peaks=null;
+    const draw=()=>{const dpr=devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;
+      cv.width=w*dpr;cv.height=h*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
+      const bw=3,gap=1.5,n=Math.floor(w/(bw+gap)),prog=a.duration?a.currentTime/a.duration:0;
+      const on=css('--accent')||'#7fd8b8',off=matchMedia('(prefers-color-scheme:dark)').matches?'#4a4a48':'#cfcdc6';
+      for(let i=0;i<n;i++){const p=t.peaks?t.peaks[Math.floor(i/n*t.peaks.length)]:0.15;
+        const bh=Math.max(2,p*h*0.95);c.fillStyle=(i/n)<prog?on:off;
+        c.fillRect(i*(bw+gap),(h-bh)/2,bw,bh);} };
+    t.draw=draw;draw();addEventListener('resize',draw);
+    // waveform peaks (decoded in browser)
+    fetch('audio/'+t.file).then(r=>r.arrayBuffer()).then(b=>new (window.AudioContext||window.webkitAudioContext)().decodeAudioData(b)).then(buf=>{
+      const d=buf.getChannelData(0),N=400,step=Math.floor(d.length/N),pk=[];let mx=0;
+      for(let i=0;i<N;i++){let m=0;for(let j=i*step;j<(i+1)*step;j+=16){const v=Math.abs(d[j]);if(v>m)m=v;}pk.push(m);if(m>mx)mx=m;}
+      t.peaks=pk.map(v=>Math.pow(v/(mx||1),0.8));draw();}).catch(()=>{});
+    a.addEventListener('loadedmetadata',()=>tm.textContent=`0:00 / ${fmt(a.duration)}`);
+    a.addEventListener('timeupdate',()=>{tm.textContent=`${fmt(a.currentTime)} / ${fmt(a.duration)}`;draw();});
+    a.addEventListener('ended',()=>{btn.innerHTML=ICON_PLAY;});
+    btn.onclick=()=>{if(a.paused){if(current&&current!==t){current.a.pause();}current=t;a.play();}else a.pause();};
+    a.addEventListener('play',()=>btn.innerHTML=ICON_PAUSE);
+    a.addEventListener('pause',()=>btn.innerHTML=ICON_PLAY);
+    cv.onclick=e=>{if(!a.duration)return;const r=cv.getBoundingClientRect();a.currentTime=(e.clientX-r.left)/r.width*a.duration;
+      if(a.paused){if(current&&current!==t)current.a.pause();current=t;a.play();}};
+  }
+}
+show();
 </script>
 </body>
 </html>
