@@ -63,7 +63,7 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap}
 .sechead{max-width:1100px;margin:0 auto;padding:28px 16px 0}
 .sechead p{margin:6px 0 0;color:var(--muted)}
 .sm{display:none}
-@media (max-width:520px){.lg{display:none}.sm{display:inline}.ttop{flex-wrap:wrap}.ttitle{white-space:normal;width:100%}nav.tabs{flex-wrap:nowrap;gap:4px}nav.tabs a{padding:6px 9px;font-size:.8rem;white-space:nowrap}.logo{font-size:.95rem;gap:5px}.topbar .in{gap:6px}.hero{padding-top:36px}.hero h1{font-size:2.1rem}}
+@media (max-width:520px){.lt{display:none}.logo svg{width:26px;height:26px}.lg{display:none}.sm{display:inline}.ttop{flex-wrap:wrap}.ttitle{white-space:normal;width:100%}nav.tabs{flex-wrap:nowrap;gap:4px}nav.tabs a{padding:6px 9px;font-size:.8rem;white-space:nowrap}.logo{font-size:.95rem;gap:5px}.topbar .in{gap:6px}.hero{padding-top:36px}.hero h1{font-size:2.1rem}}
 nav.tabs a{padding:7px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.9rem;border:1px solid var(--line);background:var(--card)}
 nav.tabs a.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 .page{display:none}.page.on{display:block}
@@ -90,24 +90,24 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:0 16px 32px}
 </head>
 <body>
 <div class="topbar"><div class="in">
-<a class="logo" href="#home"><svg viewBox="0 0 24 24"><path d="M12 21c-5-3-7-7-6-10 1-2.5 3.5-3 6-3s5 .5 6 3c1 3-1 7-6 10z" fill="#e8a0a8" stroke="currentColor" stroke-width="1.2"/><path d="M8 8l2-2 2-2.5L14 6l2 2-4-.5z" fill="var(--accent)" stroke="currentColor" stroke-width="1"/><circle cx="10" cy="12" r=".7" fill="currentColor"/><circle cx="14" cy="12" r=".7" fill="currentColor"/><circle cx="12" cy="15" r=".7" fill="currentColor"/></svg>uogene</a>
-<nav class="tabs"><a href="#home" data-p="home">Главная</a><a href="#models" data-p="models"><span class="lg">3D-модели</span><span class="sm">Модели</span></a><a href="#audio" data-p="audio"><span class="lg">Аудио-ягодки</span><span class="sm">Аудио</span></a></nav>
+<a class="logo" href="#home"><svg viewBox="0 0 24 24"><path d="M12 21c-5-3-7-7-6-10 1-2.5 3.5-3 6-3s5 .5 6 3c1 3-1 7-6 10z" fill="#e8a0a8" stroke="currentColor" stroke-width="1.2"/><path d="M8 8l2-2 2-2.5L14 6l2 2-4-.5z" fill="var(--accent)" stroke="currentColor" stroke-width="1"/><circle cx="10" cy="12" r=".7" fill="currentColor"/><circle cx="14" cy="12" r=".7" fill="currentColor"/><circle cx="12" cy="15" r=".7" fill="currentColor"/></svg><span class="lt">uogene</span></a>
+<nav class="tabs"><a href="#home" data-p="home">Главная</a><a href="#models" data-p="models"><span class="lg">3D-малинки</span><span class="sm">Малинки</span></a><a href="#audio" data-p="audio"><span class="lg">Аудио-клубнички</span><span class="sm">Клубнички</span></a></nav>
 </div></div>
 
 <section class="page" id="p-home">
 <div class="hero"><h1>uogene</h1><p>Домашнее варенье из идей: что придумал, напечатал и сыграл. Угощайтесь!</p></div>
 <div class="sections">
-<a class="scard" href="#models"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h2>3D-модели</h2><p>Свежесваренные модели для 3D-печати: держатели, крышечки, клипсы и другие полезности. Покрутите в 3D и забирайте себе.</p><div class="go"><span id="cnt-models">…</span><b>Попробовать →</b></div></a>
-<a class="scard" href="#audio"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h2>Аудио-ягодки</h2><p>Мои записи и луп-сессии. Самые свежие ягодки — сверху.</p><div class="go"><span id="cnt-audio">…</span><b>Попробовать →</b></div></a>
+<a class="scard" href="#models"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg></div><h2>3D-малинки</h2><p>Свежесваренные модели для 3D-печати: держатели, крышечки, клипсы и другие полезности. Покрутите в 3D и забирайте себе.</p><div class="go"><span id="cnt-models">…</span><b>Попробовать →</b></div></a>
+<a class="scard" href="#audio"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></div><h2>Аудио-клубнички</h2><p>Мои записи и луп-сессии. Самые свежие клубнички — сверху.</p><div class="go"><span id="cnt-audio">…</span><b>Попробовать →</b></div></a>
 </div>
 </section>
 
 <div class="sechead" id="sechead"><div class="crumbs"><a href="#home">Главная</a> › <span id="crumb"></span></div>
 <h1 id="ptitle"></h1><p id="psub"></p></div>
 <section class="page" id="p-models"><main class="grid" id="grid"></main>
-<div class="pagefoot"><a href="#home">← На главную</a><a href="#audio">Аудио-ягодки →</a></div></section>
+<div class="pagefoot"><a href="#home">← На главную</a><a href="#audio">Аудио-клубнички →</a></div></section>
 <section class="page" id="p-audio"><div class="tracks" id="tracks"></div>
-<div class="pagefoot"><a href="#home">← На главную</a><a href="#models">3D-модели →</a></div></section>
+<div class="pagefoot"><a href="#home">← На главную</a><a href="#models">3D-малинки →</a></div></section>
 <div class="modal" id="modal">
 <div class="viewer">
 <div class="vbar"><span class="name" id="vname"></span><a class="btn primary" id="vdl" style="flex:0 0 auto">Скачать</a><button class="btn" id="vclose" style="flex:0 0 auto">Закрыть</button></div>
@@ -251,8 +251,8 @@ addEventListener('resize', () => { if (modal.classList.contains('open')) resize(
 
 <script>
 // ===== Pages =====
-const PAGES={home:['',''],models:['3D-модели','Каждая модель — как баночка варенья: покрутите, рассмотрите и заберите с собой.'],
-             audio:['Аудио-ягодки','Записи, сваренные на лупах и вдохновении. Самые свежие — сверху.']};
+const PAGES={home:['',''],models:['3D-малинки','Каждая модель — как баночка варенья: покрутите, рассмотрите и заберите с собой.'],
+             audio:['Аудио-клубнички','Записи, сваренные на лупах и вдохновении. Самые свежие — сверху.']};
 function show(){const p=(location.hash.slice(1) in PAGES)?location.hash.slice(1):'home';
   document.getElementById('sechead').style.display=p==='home'?'none':'';
   document.getElementById('crumb').textContent=PAGES[p][0];
@@ -280,7 +280,7 @@ function css(v){return getComputedStyle(document.documentElement).getPropertyVal
 function initAudio(){
   if(audioInit)return;audioInit=true;
   const box=document.getElementById('tracks');
-  if(!TRACKS.length){box.innerHTML='<div class="empty">Пока пусто — ягодки ещё зреют</div>';return;}
+  if(!TRACKS.length){box.innerHTML='<div class="empty">Пока пусто — клубнички ещё зреют</div>';return;}
   TRACKS.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   const fdate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'}):'';
   for(const t of TRACKS){
