@@ -269,7 +269,7 @@ addEventListener('hashchange',show);
 // or a YouTube video: {youtube:'VIDEO_ID', title:'...', date:'YYYY-MM-DD'}
 // Sorted automatically: newest first.
 const TRACKS=[
-  {youtube:'btSb4ob5yDI', title:'Moonrise before the island', date:'2026-09-28', vertical:true},
+  {youtube:'btSb4ob5yDI', title:'Восход луны над островом', date:'2026-09-28', vertical:true},
   {youtube:'zEXxVVavigU', title:'Сплин - Праздник (ДТЗ) / Loopy pro', date:'2025-10-26'},
 ];
 const ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
@@ -291,7 +291,7 @@ function initAudio(){
       y.querySelector('.ttime').textContent=fdate(t.date);
       if(t.vertical)y.querySelector('.ytwrap').classList.add('vert');
       y.querySelector('a').href='https://www.youtube.com/watch?v='+t.youtube;
-      y.querySelector('iframe').src='https://www.youtube-nocookie.com/embed/'+t.youtube+'?rel=0';
+      y.querySelector('iframe').src='https://www.youtube-nocookie.com/embed/'+t.youtube+'?rel=0&hl=ru&cc_lang_pref=ru';
       y.querySelector('iframe').title=t.title;
       box.appendChild(y);continue;}
     const el=document.createElement('div');el.className='track';
