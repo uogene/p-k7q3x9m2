@@ -224,9 +224,11 @@ addEventListener('hashchange',show);
 
 // ===== Audio Berry =====
 // To add a track: put the mp3 in /audio and add {file:'name.mp3', title:'...'}
-// or a YouTube video: {youtube:'VIDEO_ID', title:'...'}
+// or a YouTube video: {youtube:'VIDEO_ID', title:'...', date:'YYYY-MM-DD'}
+// Sorted automatically: newest first.
 const TRACKS=[
-  {youtube:'btSb4ob5yDI', title:'Moonrise before the island', vertical:true},
+  {youtube:'btSb4ob5yDI', title:'Moonrise before the island', date:'2026-09-28', vertical:true},
+  {youtube:'zEXxVVavigU', title:'Сплин - Праздник (ДТЗ) / Loopy pro', date:'2025-10-26'},
 ];
 const ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>';
@@ -237,11 +239,14 @@ function initAudio(){
   if(audioInit)return;audioInit=true;
   const box=document.getElementById('tracks');
   if(!TRACKS.length){box.innerHTML='<div class="empty">No tracks yet</div>';return;}
+  TRACKS.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const fdate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
   for(const t of TRACKS){
     if(t.youtube){const y=document.createElement('div');y.className='track yt';
-      y.innerHTML=`<div class="tbody"><div class="ttop"><span class="ttitle"></span><a class="tdl" target="_blank" rel="noopener">Open on YouTube ↗</a></div>
+      y.innerHTML=`<div class="tbody"><div class="ttop"><span class="ttitle"></span><span><span class="ttime"></span><a class="tdl" target="_blank" rel="noopener">Open on YouTube ↗</a></span></div>
         <div class="ytwrap"><iframe loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>`;
       y.querySelector('.ttitle').textContent=t.title;
+      y.querySelector('.ttime').textContent=fdate(t.date);
       if(t.vertical)y.querySelector('.ytwrap').classList.add('vert');
       y.querySelector('a').href='https://www.youtube.com/watch?v='+t.youtube;
       y.querySelector('iframe').src='https://www.youtube-nocookie.com/embed/'+t.youtube+'?rel=0';
