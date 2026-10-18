@@ -344,12 +344,13 @@ tick();setInterval(tick,15000);
 // Sorted automatically: newest first. Add pos:N to pin a track to place N.
 const TRACKS=[
   {youtube:'Vw-kc0KJkDQ', title:'Замерзая', date:'2026-10-17', pos:2},
+  {youtube:'x8zHxWvyDLk', title:'4FTH', date:'2026-10-17', vertical:true, pos:3},
   {youtube:'btSb4ob5yDI', title:'Восход луны над островом', date:'2026-09-28', vertical:true},
   {youtube:'zEXxVVavigU', title:'Сплин - Праздник (ДТЗ) / Loopy pro', date:'2025-10-26'},
 ];
 TRACKS.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
 // pos:N pins a track to place N in the list (1 = top)
-TRACKS.filter(t=>t.pos).forEach(t=>{TRACKS.splice(TRACKS.indexOf(t),1);TRACKS.splice(Math.min(t.pos-1,TRACKS.length),0,t);});
+{const pins=TRACKS.filter(t=>t.pos).sort((a,b)=>a.pos-b.pos);pins.forEach(t=>TRACKS.splice(TRACKS.indexOf(t),1));pins.forEach(t=>TRACKS.splice(Math.min(t.pos-1,TRACKS.length),0,t));}
 const fdate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'}):'';
 document.getElementById('cnt-audio').textContent=plural(TRACKS.length,'запись','записи','записей');
 document.getElementById('latest').textContent=TRACKS.length?('01. '+TRACKS[0].title+' · '+fdate(TRACKS[0].date)):'Пока пусто — клубнички ещё зреют';
